@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Usuario')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Usuario')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? 'Editar usuario' : 'Novo usuario'">Usuario</h2>
+                    <p class="page-subtitle">Defina credenciais e permissoes.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/admin/usuarios}">Voltar</a>
+            </header>
+
+            <form class="card" th:object="${usuarioForm}"
+                  th:action="${modoEdicao} ? @{/admin/usuarios/{id}(id=${usuario.id})} : @{/admin/usuarios}"
+                  method="post">
+                <div class="card-body form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="alert alert-error" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</p>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-row">
+                            <label for="nome">Nome</label>
+                            <input id="nome" type="text" th:field="*{nome}" required>
+                            <span class="field-error" th:errors="*{nome}"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="username">Usuario</label>
+                            <input id="username" type="text" th:field="*{username}" required>
+                            <span class="field-error" th:errors="*{username}"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-row">
+                            <label for="email">E-mail</label>
+                            <input id="email" type="email" th:field="*{email}" required>
+                            <span class="field-error" th:errors="*{email}"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="senha">Senha</label>
+                            <input id="senha" type="password" th:field="*{senha}" th:required="${!modoEdicao}">
+                            <span class="field-error" th:errors="*{senha}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Roles</label>
+                        <div class="check-group">
+                            <label class="check-item" th:each="role : ${roles}">
+                                <input type="checkbox" th:field="*{roles}" th:value="${role}">
+                                <span th:text="${role}">ROLE</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <label class="check-item">
+                        <input type="checkbox" th:field="*{ativo}">
+                        <span>Usuario ativo</span>
+                    </label>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-secondary" th:href="@{/admin/usuarios}">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

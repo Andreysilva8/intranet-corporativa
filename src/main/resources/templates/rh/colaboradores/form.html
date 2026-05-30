@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Colaborador')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Colaborador')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? 'Editar colaborador' : 'Novo colaborador'">Colaborador</h2>
+                    <p class="page-subtitle">Informacoes exibidas no diretorio interno.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/rh/colaboradores}">Voltar</a>
+            </header>
+
+            <form class="card" th:object="${colaboradorForm}"
+                  th:action="${modoEdicao} ? @{/rh/colaboradores/{id}(id=${colaborador.id})} : @{/rh/colaboradores}"
+                  method="post">
+                <div class="card-body form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="alert alert-error" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</p>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-row">
+                            <label for="nomeCompleto">Nome completo</label>
+                            <input id="nomeCompleto" type="text" th:field="*{nomeCompleto}" required>
+                            <span class="field-error" th:errors="*{nomeCompleto}"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="emailCorporativo">E-mail corporativo</label>
+                            <input id="emailCorporativo" type="email" th:field="*{emailCorporativo}" required>
+                            <span class="field-error" th:errors="*{emailCorporativo}"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-row">
+                            <label for="departamento">Departamento</label>
+                            <input id="departamento" type="text" th:field="*{departamento}" required>
+                            <span class="field-error" th:errors="*{departamento}"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="cargo">Cargo</label>
+                            <input id="cargo" type="text" th:field="*{cargo}" required>
+                            <span class="field-error" th:errors="*{cargo}"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-3">
+                        <div class="form-row">
+                            <label for="telefone">Telefone</label>
+                            <input id="telefone" type="text" th:field="*{telefone}">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="ramal">Ramal</label>
+                            <input id="ramal" type="text" th:field="*{ramal}">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="localidade">Localidade</label>
+                            <input id="localidade" type="text" th:field="*{localidade}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="fotoUrl">URL da foto</label>
+                        <input id="fotoUrl" type="text" th:field="*{fotoUrl}">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="bio">Perfil</label>
+                        <textarea id="bio" th:field="*{bio}"></textarea>
+                    </div>
+
+                    <label class="check-item">
+                        <input type="checkbox" th:field="*{ativo}">
+                        <span>Colaborador ativo</span>
+                    </label>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-secondary" th:href="@{/rh/colaboradores}">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Documentos')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Documentos')}"></div>
+
+        <section class="content">
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title">Documentos corporativos</h2>
+                    <p class="page-subtitle">Arquivos internos liberados para o seu perfil de acesso.</p>
+                </div>
+                <a class="btn btn-primary" th:href="@{/documentos/novo}" sec:authorize="hasAnyRole('ADMIN','RH')">
+                    <span class="btn-icon">N</span>
+                    <span>Novo documento</span>
+                </a>
+            </header>
+
+            <form class="search-form" th:action="@{/documentos}" method="get">
+                <input type="text" name="termo" th:value="${termo}" placeholder="Buscar documento">
+                <button class="btn btn-primary" type="submit">
+                    <span class="btn-icon">B</span>
+                    <span>Buscar</span>
+                </button>
+            </form>
+
+            <div class="table-wrap section" th:if="${pagina.hasContent()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Categoria</th>
+                        <th>Arquivo</th>
+                        <th>Enviado em</th>
+                        <th>Acoes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="documento : ${pagina.content}">
+                        <td>
+                            <strong th:text="${documento.titulo}">Titulo</strong>
+                            <p class="muted" th:if="${documento.descricao}" th:text="${documento.descricao}">Descricao</p>
+                        </td>
+                        <td><span class="badge" th:text="${documento.categoria}">Categoria</span></td>
+                        <td th:text="${documento.nomeArquivoOriginal}">arquivo.pdf</td>
+                        <td th:text="${#temporals.format(documento.criadoEm, 'dd/MM/yyyy HH:mm')}">data</td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn btn-secondary" th:href="@{/documentos/{id}/download(id=${documento.id})}">Baixar</a>
+                                <a class="btn btn-secondary" th:href="@{/documentos/{id}/editar(id=${documento.id})}" sec:authorize="hasAnyRole('ADMIN','RH')">Editar</a>
+                                <form th:action="@{/documentos/{id}/excluir(id=${documento.id})}" method="post" sec:authorize="hasAnyRole('ADMIN','RH')">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <button class="btn btn-danger" type="submit">Remover</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state section" th:if="${!pagina.hasContent()}">
+                Nenhum documento encontrado.
+            </div>
+
+            <nav class="pagination" th:if="${pagina.totalPages > 1}">
+                <a class="btn btn-secondary"
+                   th:href="@{/documentos(page=${pagina.number > 0 ? pagina.number - 1 : 0},size=${pagina.size},termo=${termo})}">Anterior</a>
+                <span class="muted" th:text="'Pagina ' + ${pagina.number + 1} + ' de ' + ${pagina.totalPages}">Pagina</span>
+                <a class="btn btn-secondary"
+                   th:href="@{/documentos(page=${pagina.number + 1 < pagina.totalPages ? pagina.number + 1 : pagina.number},size=${pagina.size},termo=${termo})}">Proxima</a>
+            </nav>
+        </section>
+    </main>
+</div>
+</body>
+</html>

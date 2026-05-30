@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Erro interno')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Erro interno')}"></div>
+
+        <section class="content">
+            <article class="card">
+                <div class="card-body">
+                    <span class="badge badge-danger" th:text="${status ?: '500'}">500</span>
+                    <h2 class="page-title" th:text="${erro ?: 'Erro interno'}">Erro interno</h2>
+                    <p class="page-subtitle" th:text="${mensagem ?: 'Ocorreu um erro inesperado.'}">Mensagem</p>
+                    <div class="actions section">
+                        <a class="btn btn-primary" th:href="@{/dashboard}">Dashboard</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

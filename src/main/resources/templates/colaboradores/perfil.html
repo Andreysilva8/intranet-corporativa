@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Perfil')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Perfil')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title" th:text="${colaborador.nomeCompleto}">Nome do colaborador</h2>
+                    <p class="page-subtitle" th:text="${colaborador.cargo}">Cargo</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/colaboradores}">Voltar</a>
+            </header>
+
+            <article class="card">
+                <div class="card-body profile">
+                    <div>
+                        <img class="avatar" th:if="${colaborador.fotoUrl}" th:src="${colaborador.fotoUrl}" th:alt="${colaborador.nomeCompleto}">
+                        <div class="avatar" th:unless="${colaborador.fotoUrl}" th:text="${#strings.substring(colaborador.nomeCompleto, 0, 1)}">C</div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div>
+                            <h3 class="card-title">Contato</h3>
+                            <p><strong>E-mail:</strong> <a th:href="'mailto:' + ${colaborador.emailCorporativo}" th:text="${colaborador.emailCorporativo}">email</a></p>
+                            <p th:if="${colaborador.telefone}"><strong>Telefone:</strong> <span th:text="${colaborador.telefone}">telefone</span></p>
+                            <p th:if="${colaborador.ramal}"><strong>Ramal:</strong> <span th:text="${colaborador.ramal}">ramal</span></p>
+                        </div>
+
+                        <div>
+                            <h3 class="card-title">Organizacao</h3>
+                            <p><strong>Departamento:</strong> <span th:text="${colaborador.departamento}">departamento</span></p>
+                            <p><strong>Cargo:</strong> <span th:text="${colaborador.cargo}">cargo</span></p>
+                            <p th:if="${colaborador.localidade}"><strong>Localidade:</strong> <span th:text="${colaborador.localidade}">local</span></p>
+                        </div>
+
+                        <div class="section" th:if="${colaborador.bio}">
+                            <h3 class="card-title">Perfil</h3>
+                            <p th:text="${colaborador.bio}">Bio</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

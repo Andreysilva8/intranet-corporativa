@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Recado')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Recado')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? 'Editar recado' : 'Novo recado'">Recado</h2>
+                    <p class="page-subtitle">Publique comunicados para o dashboard.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/rh/recados}">Voltar</a>
+            </header>
+
+            <form class="card" th:object="${recadoForm}"
+                  th:action="${modoEdicao} ? @{/rh/recados/{id}(id=${recado.id})} : @{/rh/recados}"
+                  method="post">
+                <div class="card-body form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="alert alert-error" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</p>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="titulo">Titulo</label>
+                        <input id="titulo" type="text" th:field="*{titulo}" required>
+                        <span class="field-error" th:errors="*{titulo}"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="mensagem">Mensagem</label>
+                        <textarea id="mensagem" th:field="*{mensagem}" required></textarea>
+                        <span class="field-error" th:errors="*{mensagem}"></span>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-row">
+                            <label for="dataPublicacao">Data de publicacao</label>
+                            <input id="dataPublicacao" type="datetime-local" th:field="*{dataPublicacao}">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="dataExpiracao">Data de expiracao</label>
+                            <input id="dataExpiracao" type="datetime-local" th:field="*{dataExpiracao}">
+                        </div>
+                    </div>
+
+                    <div class="form-row-inline">
+                        <label class="check-item">
+                            <input type="checkbox" th:field="*{destaque}">
+                            <span>Destacar recado</span>
+                        </label>
+
+                        <label class="check-item">
+                            <input type="checkbox" th:field="*{ativo}">
+                            <span>Recado ativo</span>
+                        </label>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-secondary" th:href="@{/rh/recados}">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

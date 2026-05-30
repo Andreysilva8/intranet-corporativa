@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Diretorio')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Diretorio')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title">Diretorio de colaboradores</h2>
+                    <p class="page-subtitle">Pesquise por nome, e-mail, departamento ou cargo.</p>
+                </div>
+            </header>
+
+            <form class="search-form" th:action="@{/colaboradores}" method="get">
+                <input type="text" name="termo" th:value="${termo}" placeholder="Buscar colaborador">
+                <button class="btn btn-primary" type="submit">
+                    <span class="btn-icon">B</span>
+                    <span>Buscar</span>
+                </button>
+            </form>
+
+            <div class="grid grid-3 section" th:if="${pagina.hasContent()}">
+                <article class="card" th:each="colaborador : ${pagina.content}">
+                    <div class="card-body">
+                        <div class="avatar" th:text="${#strings.substring(colaborador.nomeCompleto, 0, 1)}">C</div>
+                        <h3 class="card-title" th:text="${colaborador.nomeCompleto}">Nome</h3>
+                        <p class="muted" th:text="${colaborador.cargo}">Cargo</p>
+                        <p th:text="${colaborador.departamento}">Departamento</p>
+                        <p><a th:href="'mailto:' + ${colaborador.emailCorporativo}" th:text="${colaborador.emailCorporativo}">email</a></p>
+                        <a class="btn btn-secondary" th:href="@{/colaboradores/{id}(id=${colaborador.id})}">Ver perfil</a>
+                    </div>
+                </article>
+            </div>
+
+            <div class="empty-state section" th:if="${!pagina.hasContent()}">
+                Nenhum colaborador encontrado.
+            </div>
+
+            <nav class="pagination" th:if="${pagina.totalPages > 1}">
+                <a class="btn btn-secondary"
+                   th:href="@{/colaboradores(page=${pagina.number > 0 ? pagina.number - 1 : 0},size=${pagina.size},termo=${termo})}">Anterior</a>
+                <span class="muted" th:text="'Pagina ' + ${pagina.number + 1} + ' de ' + ${pagina.totalPages}">Pagina</span>
+                <a class="btn btn-secondary"
+                   th:href="@{/colaboradores(page=${pagina.number + 1 < pagina.totalPages ? pagina.number + 1 : pagina.number},size=${pagina.size},termo=${termo})}">Proxima</a>
+            </nav>
+        </section>
+    </main>
+</div>
+</body>
+</html>

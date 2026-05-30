@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-label="Corporate office abstract background">
+    <rect width="1440" height="960" fill="#1f4e79"/>
+    <path d="M0 690h1440v270H0z" fill="#183a5a"/>
+    <path d="M160 140h230v560H160zM470 220h180v480H470zM720 120h260v580H720zM1060 250h210v450h-210z" fill="#ffffff" opacity=".12"/>
+    <path d="M205 185h44v48h-44zM285 185h44v48h-44zM205 285h44v48h-44zM285 285h44v48h-44zM205 385h44v48h-44zM285 385h44v48h-44zM515 265h38v44h-38zM585 265h38v44h-38zM515 360h38v44h-38zM585 360h38v44h-38zM780 170h48v52h-48zM875 170h48v52h-48zM780 275h48v52h-48zM875 275h48v52h-48zM1115 300h46v48h-46zM1190 300h46v48h-46zM1115 405h46v48h-46zM1190 405h46v48h-46z" fill="#ffffff" opacity=".18"/>
+    <path d="M0 760c210-58 350-64 545-18 215 52 402 37 616-40 103-37 190-52 279-48v306H0z" fill="#2f855a" opacity=".28"/>
+</svg>

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="alerts">
+    <div class="alert alert-success" th:if="${sucesso}" th:text="${sucesso}">Operacao realizada.</div>
+    <div class="alert alert-error" th:if="${erro}" th:text="${erro}">Nao foi possivel concluir.</div>
+</div>
+</body>
+</html>

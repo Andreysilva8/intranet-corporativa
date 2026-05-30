@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Mural')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Mural')}"></div>
+
+        <section class="content">
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title">Mural</h2>
+                    <p class="page-subtitle">Comunicados exibidos no dashboard.</p>
+                </div>
+                <a class="btn btn-primary" th:href="@{/rh/recados/novo}">Novo recado</a>
+            </header>
+
+            <div class="table-wrap section" th:if="${pagina.hasContent()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Titulo</th>
+                        <th>Publicacao</th>
+                        <th>Destaque</th>
+                        <th>Status</th>
+                        <th>Acoes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="recado : ${pagina.content}">
+                        <td>
+                            <strong th:text="${recado.titulo}">Titulo</strong>
+                            <p class="muted" th:text="${#strings.abbreviate(recado.mensagem, 120)}">Mensagem</p>
+                        </td>
+                        <td th:text="${#temporals.format(recado.dataPublicacao, 'dd/MM/yyyy HH:mm')}">data</td>
+                        <td>
+                            <span class="badge badge-success" th:if="${recado.destaque}">Sim</span>
+                            <span class="badge" th:unless="${recado.destaque}">Nao</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-success" th:if="${recado.ativo}">Ativo</span>
+                            <span class="badge badge-danger" th:unless="${recado.ativo}">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn btn-secondary" th:href="@{/rh/recados/{id}/editar(id=${recado.id})}">Editar</a>
+                                <form th:action="@{/rh/recados/{id}/status(id=${recado.id})}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="ativo" th:value="${!recado.ativo}">
+                                    <button class="btn btn-secondary" type="submit" th:text="${recado.ativo} ? 'Inativar' : 'Ativar'">Status</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state section" th:if="${!pagina.hasContent()}">
+                Nenhum recado cadastrado.
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

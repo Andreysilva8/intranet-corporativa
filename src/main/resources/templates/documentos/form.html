@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Documento')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Documento')}"></div>
+
+        <section class="content">
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? 'Editar documento' : 'Novo documento'">Documento</h2>
+                    <p class="page-subtitle">Defina os metadados e os perfis autorizados.</p>
+                </div>
+                <a class="btn btn-secondary" th:href="@{/documentos}">Voltar</a>
+            </header>
+
+            <form class="card" th:object="${documentoForm}"
+                  th:action="${modoEdicao} ? @{/documentos/{id}(id=${documento.id})} : @{/documentos/upload}"
+                  method="post" enctype="multipart/form-data">
+                <div class="card-body form-grid">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="alert alert-error" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</p>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="titulo">Titulo</label>
+                        <input id="titulo" type="text" th:field="*{titulo}" required>
+                        <span class="field-error" th:errors="*{titulo}"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="categoria">Categoria</label>
+                        <input id="categoria" type="text" th:field="*{categoria}" required>
+                        <span class="field-error" th:errors="*{categoria}"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="descricao">Descricao</label>
+                        <textarea id="descricao" th:field="*{descricao}"></textarea>
+                    </div>
+
+                    <div class="form-row" th:unless="${modoEdicao}">
+                        <label for="arquivo">Arquivo</label>
+                        <input id="arquivo" type="file" th:field="*{arquivo}" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Perfis autorizados</label>
+                        <div class="check-group">
+                            <label class="check-item" th:each="role : ${roles}">
+                                <input type="checkbox" th:field="*{rolesPermitidas}" th:value="${role}">
+                                <span th:text="${role}">ROLE</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-secondary" th:href="@{/documentos}">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

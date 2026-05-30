@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" data-sidebar th:fragment="sidebar">
+    <a class="brand" th:href="@{/dashboard}">
+        <span class="brand-mark">IC</span>
+        <span>Intranet Corporativa</span>
+    </a>
+
+    <nav class="nav" aria-label="Navegacao principal">
+        <a class="nav-link" th:href="@{/dashboard}">
+            <span class="nav-icon">D</span>
+            <span>Dashboard</span>
+        </a>
+        <a class="nav-link" th:href="@{/colaboradores}">
+            <span class="nav-icon">C</span>
+            <span>Diretorio</span>
+        </a>
+        <a class="nav-link" th:href="@{/documentos}">
+            <span class="nav-icon">A</span>
+            <span>Documentos</span>
+        </a>
+
+        <div class="nav-section" sec:authorize="hasAnyRole('ADMIN','RH')">RH</div>
+        <a class="nav-link" th:href="@{/rh/colaboradores}" sec:authorize="hasAnyRole('ADMIN','RH')">
+            <span class="nav-icon">P</span>
+            <span>Colaboradores</span>
+        </a>
+        <a class="nav-link" th:href="@{/rh/recados}" sec:authorize="hasAnyRole('ADMIN','RH')">
+            <span class="nav-icon">M</span>
+            <span>Mural</span>
+        </a>
+
+        <div class="nav-section" sec:authorize="hasRole('ADMIN')">Admin</div>
+        <a class="nav-link" th:href="@{/admin/usuarios}" sec:authorize="hasRole('ADMIN')">
+            <span class="nav-icon">U</span>
+            <span>Usuarios</span>
+        </a>
+        <a class="nav-link" th:href="@{/admin/links-rapidos}" sec:authorize="hasRole('ADMIN')">
+            <span class="nav-icon">L</span>
+            <span>Links rapidos</span>
+        </a>
+    </nav>
+</aside>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Dashboard')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Dashboard')}"></div>
+
+        <section class="content">
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title">Mural corporativo</h2>
+                    <p class="page-subtitle">Comunicados ativos e atalhos essenciais para o dia a dia.</p>
+                </div>
+                <a class="btn btn-primary" th:href="@{/documentos}">
+                    <span class="btn-icon">A</span>
+                    <span>Documentos</span>
+                </a>
+            </header>
+
+            <div class="grid grid-2 section">
+                <div>
+                    <div class="toolbar">
+                        <h3 class="card-title">Recados</h3>
+                        <a th:href="@{/rh/recados/novo}" sec:authorize="hasAnyRole('ADMIN','RH')">Novo recado</a>
+                    </div>
+
+                    <div class="grid" th:if="${!#lists.isEmpty(recados)}">
+                        <article class="card" th:each="recado : ${recados}" th:classappend="${recado.destaque} ? ' recado-destaque'">
+                            <div class="card-body">
+                                <div class="toolbar">
+                                    <h4 class="card-title" th:text="${recado.titulo}">Titulo</h4>
+                                    <span class="badge badge-success" th:if="${recado.destaque}">Destaque</span>
+                                </div>
+                                <p th:text="${recado.mensagem}">Mensagem</p>
+                                <p class="muted" th:text="${#temporals.format(recado.dataPublicacao, 'dd/MM/yyyy HH:mm')}">01/01/2026</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="empty-state" th:if="${#lists.isEmpty(recados)}">
+                        Nenhum recado ativo no momento.
+                    </div>
+                </div>
+
+                <div>
+                    <div class="toolbar">
+                        <h3 class="card-title">Links rapidos</h3>
+                        <a th:href="@{/admin/links-rapidos/novo}" sec:authorize="hasRole('ADMIN')">Novo link</a>
+                    </div>
+
+                    <div class="grid" th:if="${!#lists.isEmpty(linksRapidos)}">
+                        <a class="card" th:each="link : ${linksRapidos}" th:href="${link.url}" target="_blank" rel="noopener">
+                            <div class="card-body">
+                                <div class="toolbar">
+                                    <h4 class="card-title" th:text="${link.titulo}">Portal</h4>
+                                    <span class="badge" th:if="${link.categoria}" th:text="${link.categoria}">Categoria</span>
+                                </div>
+                                <p class="muted" th:text="${link.url}">https://empresa.local</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="empty-state" th:if="${#lists.isEmpty(linksRapidos)}">
+                        Nenhum link rapido cadastrado.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

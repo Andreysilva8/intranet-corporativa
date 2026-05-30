@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Usuarios')}"></head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-area">
+        <div th:replace="~{fragments/topbar :: topbar('Usuarios')}"></div>
+
+        <section class="content">
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+            <header class="page-header">
+                <div>
+                    <h2 class="page-title">Usuarios</h2>
+                    <p class="page-subtitle">Contas, status e perfis de acesso.</p>
+                </div>
+                <a class="btn btn-primary" th:href="@{/admin/usuarios/novo}">Novo usuario</a>
+            </header>
+
+            <div class="table-wrap section" th:if="${pagina.hasContent()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Usuario</th>
+                        <th>E-mail</th>
+                        <th>Roles</th>
+                        <th>Status</th>
+                        <th>Acoes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="usuario : ${pagina.content}">
+                        <td th:text="${usuario.nome}">Nome</td>
+                        <td th:text="${usuario.username}">username</td>
+                        <td th:text="${usuario.email}">email</td>
+                        <td>
+                            <span class="badge" th:each="role : ${usuario.roles}" th:text="${role}">ROLE</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-success" th:if="${usuario.ativo}">Ativo</span>
+                            <span class="badge badge-danger" th:unless="${usuario.ativo}">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn btn-secondary" th:href="@{/admin/usuarios/{id}/editar(id=${usuario.id})}">Editar</a>
+                                <form th:action="@{/admin/usuarios/{id}/status(id=${usuario.id})}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="ativo" th:value="${!usuario.ativo}">
+                                    <button class="btn btn-secondary" type="submit" th:text="${usuario.ativo} ? 'Inativar' : 'Ativar'">Status</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state section" th:if="${!pagina.hasContent()}">
+                Nenhum usuario cadastrado.
+            </div>
+
+            <nav class="pagination" th:if="${pagina.totalPages > 1}">
+                <a class="btn btn-secondary" th:href="@{/admin/usuarios(page=${pagina.number > 0 ? pagina.number - 1 : 0},size=${pagina.size})}">Anterior</a>
+                <span class="muted" th:text="'Pagina ' + ${pagina.number + 1} + ' de ' + ${pagina.totalPages}">Pagina</span>
+                <a class="btn btn-secondary" th:href="@{/admin/usuarios(page=${pagina.number + 1 < pagina.totalPages ? pagina.number + 1 : pagina.number},size=${pagina.size})}">Proxima</a>
+            </nav>
+        </section>
+    </main>
+</div>
+</body>
+</html>
